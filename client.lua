@@ -31,11 +31,21 @@ local function initialize()
 			title = value.title,
 			description = value.description,
 			icon = value.icon,
-			onSelect = function (_)
-				if data.currentPlayer == 0 then
+			onSelect = function(_)
+				if data.currentPlayer.source == 0 then
 					return utils.notify({
 						title = settings.locales['givelic_notify_title'],
 						description = settings.locales['givelic_player_not_found']:format(settings.currentPlayer.name),
+						type = 'error'
+					})
+				end
+
+				-- double check if player disconnected in meanwhile
+				local isPlayerValid, _ = lib.callback.await('licenses:server:checkPlayerValidity', false, data.currentPlayer.name)
+				if not isPlayerValid then
+					return utils.notify({
+						title = settings.locales['givelic_notify_title'],
+						description = settings.locales['givelic_player_not_found']:format(data.currentPlayer.name),
 						type = 'error'
 					})
 				end
@@ -50,6 +60,20 @@ local function initialize()
 						type = 'error'
 					})
 				end
+
+				local metadata = {
+					description = settings.locales['item_description_format']:format(data.currentPlayer.name, value.title),
+					owner = data.currentPlayer.name,
+					lic = value.id,
+				}
+
+				local success, msg = lib.callback.await('licenses:server:tryAddItem', false, data.currentPlayer.source, value.item, metadata)
+				utils.notify({
+					title = settings.locales['givelic_notify_title'],
+					description = msg,
+					type = success and 'success' or 'error'
+				})
+
 			end
 		}
 		for _, jobname in ipairs(value.jobs) do
@@ -61,7 +85,7 @@ local function initialize()
 	end
 	for jobname, menuElements in pairs(data.licenses) do
 		lib.registerContext({
-			id = 'job_menu_' ..jobname,
+			id = 'job_menu_' .. jobname,
 			title = settings.locales['givelic_menu_title'],
 			options = menuElements
 		})
@@ -74,10 +98,10 @@ local function requestMenu()
 	if not ESX.PlayerLoaded then return false end
 	local jobname = ESX.PlayerData.job.name
 	if not data.licenses[jobname] then return false end
-	lib.showContext('job_menu_' ..jobname)
+	lib.showContext('job_menu_' .. jobname)
 end
 
-RegisterCommand(settings.givelic.command, function (source, args, raw)
+RegisterCommand(settings.givelic.command, function(source, args, raw)
 	if not shared.ready then
 		return lib.print.warn(("'%s' is not ready yet!"):format(shared.resource))
 	end
@@ -100,7 +124,6 @@ RegisterCommand(settings.givelic.command, function (source, args, raw)
 		})
 	end
 	data.currentPlayer = playerData
-	
-	requestMenu()
 
+	requestMenu()
 end, false)
