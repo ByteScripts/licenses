@@ -68,6 +68,15 @@ RegisterCommand(settings.givelic.command, function (source, args, raw)
 		})
 	end
 
+	local name = args[1]
+	local isPlayerValid, playerSource = lib.callback.await('licenses:server:checkPlayerValidity', false, name)
+	if not isPlayerValid then
+		return utils.notify({
+			title = settings.locales['givelic_notify_title'],
+			description = settings.locales['givelic_player_not_found']:format(name),
+			type = 'error'
+		})
+	end
 	requestMenu()
 
 end, false)

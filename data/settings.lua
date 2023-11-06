@@ -13,6 +13,7 @@ return {
     locales = {
         ['givelic_menu_title'] = 'Lizenzen ausstellen',
         ['givelic_notify_title'] = 'Lizenzsystem',
-        ['givelic_command_usage'] = 'Nutze /givelic <Vorname_Nachname>'
+        ['givelic_command_usage'] = 'Nutze /givelic <Vorname_Nachname>',
+        ['givelic_player_not_found'] = '%s konnte nicht gefunden werden!'
     }
 }
