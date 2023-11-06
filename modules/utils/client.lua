@@ -29,6 +29,8 @@ end
 ---Sends a notify to the player
 ---@param data NotifyProps
 function utils.notify(data)
+    data.position = 'center-left'
+    data.duration = 5000
     lib.notify(data)
 end
 

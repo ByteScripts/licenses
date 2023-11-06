@@ -11,6 +11,8 @@ return {
         }
     },
     locales = {
-        ['givelic_menu_title'] = 'Lizenzen ausstellen'
+        ['givelic_menu_title'] = 'Lizenzen ausstellen',
+        ['givelic_notify_title'] = 'Lizenzsystem',
+        ['givelic_command_usage'] = 'Nutze /givelic <Vorname_Nachname>'
     }
 }

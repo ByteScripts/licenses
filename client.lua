@@ -19,12 +19,15 @@ local data = {
 	licenses = {}
 }
 local function initialize()
-	for key, value in ipairs(settings.licenses) do
+	for _, value in ipairs(settings.licenses) do
 		---@type ContextMenuItem
 		local element = {
 			title = value.title,
 			description = value.description,
 			icon = value.icon,
+			onSelect = function (_)
+				
+			end
 		}
 		for _, jobname in ipairs(value.jobs) do
 			if not data.licenses[jobname] then
@@ -55,6 +58,14 @@ local utils = require 'modules.utils.client'
 RegisterCommand(settings.givelic.command, function (source, args, raw)
 	if not shared.ready then
 		return lib.print.warn(("'%s' is not ready yet!"):format(shared.resource))
+	end
+
+	if #args ~= 1 then
+		return utils.notify({
+			title = settings.locales['givelic_notify_title'],
+			description = settings.locales['givelic_command_usage'],
+			type = 'error',
+		})
 	end
 
 	requestMenu()
