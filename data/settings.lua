@@ -18,7 +18,7 @@ return {
         ['givelic_command_usage'] = 'Use /givelic <Firstname_Lastname>',
         ['givelic_player_not_found'] = '%s could not be found!',
         ['givelic_player_distance'] = 'You have to be near the player!',
-        ['item_description_format'] = 'Besitzer: **%s**  \nLizenz: **%s**',
+        ['item_description_format'] = 'Owner: **%s**  \nLicense: **%s**',
         ['not_enough_space'] = "The player does not have enough space",
         ['item_added'] = 'The license got given out!',
         ['logger_desc'] = '**%s** gave out **%s** to **%s**.'
