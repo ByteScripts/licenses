@@ -26,5 +26,11 @@ function utils.generateCarLabel(carModel)
     return label
 end
 
+---Sends a notify to the player
+---@param data NotifyProps
+function utils.notify(data)
+    lib.notify(data)
+end
+
 
 return utils

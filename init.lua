@@ -1,5 +1,6 @@
 shared = {
-    resource = GetCurrentResourceName()
+    resource = GetCurrentResourceName(),
+    ready = false
 }
 
 settings = require 'data.settings'

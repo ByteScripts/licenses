@@ -4,10 +4,10 @@ games { 'gta5' }
 use_experimental_fxv2_oal 'yes'
 lua54 'yes'
 
-author 'Mirow <email.mirowyt@gmail.com>'
-description 'Template System'
---version 'Development Build'
-version 'Alpha'
+author 'ByteScripts'
+description 'License System'
+version 'Development Build'
+--version 'Alpha'
 
 -- Manifest
 dependencies {
