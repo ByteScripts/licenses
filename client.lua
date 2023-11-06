@@ -39,6 +39,17 @@ local function initialize()
 						type = 'error'
 					})
 				end
+
+				local playerCoords = GetEntityCoords(cache.ped)
+				local targetCoords = GetEntityCoords(GetPlayerPed(GetPlayerFromServerId(data.currentPlayer.source)))
+				local distance = #(playerCoords - targetCoords)
+				if settings.distanceCheck and distance >= settings.distanceCheck then
+					return utils.notify({
+						title = settings.locales['givelic_notify_title'],
+						description = settings.locales['givelic_player_distance'],
+						type = 'error'
+					})
+				end
 			end
 		}
 		for _, jobname in ipairs(value.jobs) do
