@@ -16,8 +16,14 @@ AddEventHandler('esx:setJob', function(job)
 end)
 
 local data = {
+	currentPlayer = {
+		source = 0,
+		name = '',
+	},
 	licenses = {}
 }
+
+local utils = require 'modules.utils.client'
 local function initialize()
 	for _, value in ipairs(settings.licenses) do
 		---@type ContextMenuItem
@@ -26,7 +32,13 @@ local function initialize()
 			description = value.description,
 			icon = value.icon,
 			onSelect = function (_)
-				
+				if data.currentPlayer == 0 then
+					return utils.notify({
+						title = settings.locales['givelic_notify_title'],
+						description = settings.locales['givelic_player_not_found']:format(settings.currentPlayer.name),
+						type = 'error'
+					})
+				end
 			end
 		}
 		for _, jobname in ipairs(value.jobs) do
@@ -54,7 +66,6 @@ local function requestMenu()
 	lib.showContext('job_menu_' ..jobname)
 end
 
-local utils = require 'modules.utils.client'
 RegisterCommand(settings.givelic.command, function (source, args, raw)
 	if not shared.ready then
 		return lib.print.warn(("'%s' is not ready yet!"):format(shared.resource))
@@ -69,7 +80,7 @@ RegisterCommand(settings.givelic.command, function (source, args, raw)
 	end
 
 	local name = args[1]
-	local isPlayerValid, playerSource = lib.callback.await('licenses:server:checkPlayerValidity', false, name)
+	local isPlayerValid, playerData = lib.callback.await('licenses:server:checkPlayerValidity', false, name)
 	if not isPlayerValid then
 		return utils.notify({
 			title = settings.locales['givelic_notify_title'],
@@ -77,6 +88,8 @@ RegisterCommand(settings.givelic.command, function (source, args, raw)
 			type = 'error'
 		})
 	end
+	data.currentPlayer = playerData
+	
 	requestMenu()
 
 end, false)
