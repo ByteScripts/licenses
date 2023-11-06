@@ -33,14 +33,30 @@ local function initialize()
 			table.insert(data.licenses[jobname], element)
 		end
 	end
+	for jobname, menuElements in pairs(data.licenses) do
+		lib.registerContext({
+			id = 'job_menu_' ..jobname,
+			title = settings.locales['givelic_menu_title'],
+			options = menuElements
+		})
+	end
 	shared.ready = true
 end
 initialize()
+
+local function requestMenu()
+	if not ESX.PlayerLoaded then return false end
+	local jobname = ESX.PlayerData.job.name
+	if not data.licenses[jobname] then return false end
+	lib.showContext('job_menu_' ..jobname)
+end
 
 local utils = require 'modules.utils.client'
 RegisterCommand(settings.givelic.command, function (source, args, raw)
 	if not shared.ready then
 		return lib.print.warn(("'%s' is not ready yet!"):format(shared.resource))
 	end
+
+	requestMenu()
 
 end, false)
